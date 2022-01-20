@@ -1,0 +1,30 @@
+{
+  "name": "docker-project",
+  "version": "1.0.0",
+  "description": "Docker Project",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.15.3",
+    "marko": "^4.4.21",
+    "mongoose": "^4.11.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gustavourzedo/docker-repository.git"
+  },
+  "keywords": [
+    "docker",
+    "code"
+  ],
+  "author": "Gustavo Urzedo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gustavourzedo/docker-repositoryissues"
+  },
+  "homepage": "https://github.com/gustavourzedo/docker-repository#readme"
+}

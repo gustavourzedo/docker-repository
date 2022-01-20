@@ -1,0 +1,77 @@
+version: '3.9'
+
+networks:
+  production-network:
+    driver: bridge
+
+#End of networks configuration!
+
+services:
+  mongodb:
+    image: mongo:latest
+    networks:
+      - production-network
+      
+#End of Mongo configuration!
+
+  node01:
+    build:
+      dockerfile: ./docker/books.dockerfile
+      context: .
+    image: gustavourzedo/books
+    container_name: books-01
+    ports:
+    - "3000"
+    networks:
+      - production-network
+    depends_on:
+      - "mongodb"
+
+#End of Node-01 configuration!
+
+  node02:
+    build:
+      dockerfile: ./docker/books.dockerfile
+      context: .
+    image: gustavourzedo/books
+    container_name: books-02
+    ports:
+    - "3000"
+    networks:
+      - production-network
+    depends_on:
+      - "mongodb"
+
+#End of Node-02 configuration!
+
+  node03:
+    build:
+      dockerfile: ./docker/books.dockerfile
+      context: .
+    image: gustavourzedo/books
+    container_name: books-03
+    ports:
+    - "3000"
+    networks:
+      - production-network
+    depends_on:
+      - "mongodb"
+
+#End of Node-03 configuration!
+
+  nginx:
+    build:
+      dockerfile: ./docker/nginx.dockerfile
+      context: .
+    image: gustavourzedo/nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    networks:
+      - production-network
+    depends_on:
+      - "node01"
+      - "node02"
+      - "node03"
+
+#End of NGINX configuration!
