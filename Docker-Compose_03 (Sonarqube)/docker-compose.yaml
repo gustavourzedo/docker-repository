@@ -1,0 +1,62 @@
+version: "3.9"
+
+networks:
+  bridge:
+
+#End network configuration
+
+services:
+  sonarqube:
+    image: sonarqube:9.2.4-community
+    ports:
+      - "9000:9000"
+    networks:
+      - bridge
+    environment:
+      SONAR.URL: jdbc.postgresql://skw-postgres/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: skw@s0n4r
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+    container_name: skw-sonar-postgres
+
+    depends_on:
+      - postgres
+
+#End Sonarqube configuration
+
+  postgres:
+    image: postgres:14
+    networks:
+      - bridge
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: skw@s0n4r
+      POSTGRES_DB: sonar
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+    container_name: skw-postgres
+
+#End Postgres configuration
+
+volumes:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  sonarqube_bundled-plugins:
+  postgresql:
+  postgresql_data:
+
+#End volumes configuration
+
+
+#How uping manual (Not uso volume in this form, just for test):
+
+#docker container run --name postgres -e POSTGRES_PASSWORD=sonar -e POSTGRES_USER=sonar -e POSTGRES_DB=sonar --network bridge -it -d postgres
+#docker container run -it --name sonarqube -p 9000:9000 -e sonar.jdbc.username=sonar -e sonar.jdbc.password=sonar -e sonar.url=jdbc.postgresql://postgres:5432/sonar --network bridge -d sonarqube
